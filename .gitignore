@@ -1,1 +1,3 @@
-*.jon
+*.json
+.ipynb*
+*.pyc
