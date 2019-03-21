@@ -1,8 +1,4 @@
 from google.cloud import bigquery
-import pickle 
-
-# Credential file is stored locally and not included in version control
-# Based on the GOOGLE_APPLICATION_CREDENTIALS path parameter
 
 def query_ncaa():
     client = bigquery.Client()
@@ -17,6 +13,3 @@ def query_ncaa():
 
     for row in results:
         print(row)
-
-if __name__ == '__main__':
-    query_ncaa()
