@@ -20,4 +20,5 @@ def extractTable(project, datasetID, tableID, bucket):
     print('Exported {}:{}.{} to {}'.format(
         project, datasetID, tableID, destinationURI))
 
-extractTable("datavizfinal", "datavizfinal", "pbp", "datavizfinal")
+if __name__ == '__main__':
+    extractTable("datavizfinal", "datavizfinal", "pbp", "datavizfinal")
