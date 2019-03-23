@@ -1,0 +1,28 @@
+columns for the pbp data:
+
+Keep:
+all data related to the event itself
+game_id: id of the game
+game_clock: time left in the period in seconds
+elapsed_time_sec: total time elapsed in the game in seconds
+team_basket: basket (left or right) for which the event is attributed to
+event_id: unique identifier for the event
+event_description: A description of the event
+event_coord_x: The location of the play in number of inches from the "left" baseline, max 1128
+event_coord_y: The location of the play in inches from the "top" sideline, max 600
+event_type: Category of event
+type: event subtype
+shot_made: boolean
+shot_type: There are 5 categories of shot types: jump shot, layup, hook shot, dunk, tip shot
+shot_subtype: Additional information about shot type (e.g. fadeaway, floating, pullup, step back, turnaround, alley-oop, driving, finger roll, putback, reverse)
+three_point_shot: Boolean value indicating whether the event was a three-point shot attempt
+points_scored: Number of points scored on the play
+turnover_type: Type of turnover
+rebound_type: Indicator of whether a rebound was offensive or defensive
+timeout_duration: Duration of timeout
+
+
+Questionable:
+game_clock: Time left in the period in minutes
+period: This field indicates which period the event occured in. "1" is the first 20-minute half, "2" is the second 20-minute half, "3" is the first OT, "4" is the second OT, etc.
+team_name: name of the team that the event is attributed to

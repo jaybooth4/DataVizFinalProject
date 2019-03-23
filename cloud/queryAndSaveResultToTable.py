@@ -4,13 +4,13 @@ from google.cloud.bigquery.table import Table
 from google.cloud import bigquery
 import pickle
 
-def createNewTableFromQuery(destProject, destDataset, destTableName):
+pbp = """SELECT * FROM `bigquery-public-data.ncaa_basketball.mbb_pbp_sr` WHERE event_coord_x IS NOT NULL AND event_coord_y IS NOT NULL;"""
+
+def createNewTableFromQuery(queryString, destProject, destDataset, destTableName):
 
     client = bigquery.Client()
 
-    query = ("""SELECT *
-        FROM `bigquery-public-data.ncaa_basketball.mascots`
-        LIMIT 10""")
+    query = (queryString)
 
     jobConfig = bigquery.QueryJobConfig()
 
@@ -34,4 +34,4 @@ def createNewTableFromQuery(destProject, destDataset, destTableName):
     print("success")
 
 if __name__ == '__main__':
-    createNewTableFromQuery("datavizfinal", "datavizfinal", "mascots")
+    createNewTableFromQuery(pbp, "datavizfinal", "datavizfinal", "pbp")

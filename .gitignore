@@ -1,3 +1,4 @@
 *.json
 .ipynb*
 *.pyc
+*.csv

@@ -5,7 +5,7 @@ def extractTable(project, datasetID, tableID, bucket):
 
     client = bigquery.Client()
 
-    destinationURI = 'gs://{}/{}'.format(bucket, tableID)
+    destinationURI = 'gs://{}/{}'.format(bucket, tableID + "-*")
     dataset_ref = client.dataset(datasetID, project=project)
     table_ref = dataset_ref.table(tableID)
 
@@ -20,4 +20,4 @@ def extractTable(project, datasetID, tableID, bucket):
     print('Exported {}:{}.{} to {}'.format(
         project, datasetID, tableID, destinationURI))
 
-extractTable("bigquery-public-data", "ncaa_basketball", "mascots", "datavizfinal")
+extractTable("datavizfinal", "datavizfinal", "pbp", "datavizfinal")
