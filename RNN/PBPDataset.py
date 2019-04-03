@@ -9,7 +9,7 @@ class PBPDataset:
         self.data = pd.read_csv(CSVFile)[["game_id", "event_coord_x", "event_coord_y"]]
         gameDataframes = [self.data.loc[self.data["game_id"] == game_id, ["event_coord_x", "event_coord_y"]] for game_id in self.data["game_id"].unique()]
         self.batched = list(map(lambda game: torch.tensor(game.values, dtype=torch.float).view(1, -1, 2), gameDataframes))
-        self.labels = list(map(lambda game: torch.tensor(np.append(game.values[1:], np.array([-1, -1])).reshape(-1, 2), dtype=torch.float).view(1, -1, 2), gameDataframes))
+        self.labels = list(map(lambda game: torch.tensor(np.append(game.values[1:], np.array([.5, .5])).reshape(-1, 2), dtype=torch.float).view(1, -1, 2), gameDataframes))
         self.numBatches = len(self.batched)
         self.index = 0
 
@@ -26,6 +26,7 @@ class PBPDataset:
             return batch, labels
 
     def __iter__(self):
+        self.index = 0
         return self
 
 

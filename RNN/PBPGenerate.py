@@ -5,8 +5,6 @@ import torch
 torch.manual_seed(1)
 
 def main():
-    playData = PBPDataset('../data/pbp_final_small.csv')
-
     rnn = torch.load("model/test.pt")
 
     hidden = rnn.init_hidden(1)
