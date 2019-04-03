@@ -4,11 +4,12 @@ from torch.nn.utils.rnn import pad_packed_sequence
 
 class PBPDataset:
 
-    def __init__(self, csv_file):
-        self.data = pd.read_csv(csv_file)
-        self.batched = self.data.groupby('game_id').apply(list)
-        print(self.batched)
-        self.numBatches = self.batched.shape[0]
+    def __init__(self, CSVFile):
+        self.data = pd.read_csv(CSVFile)[["game_id", "event_coord_x", "event_coord_y"]]
+        gameDataframes = [self.data.loc[self.data["game_id"] == game_id, ["event_coord_x", "event_coord_y"]] for game_id in self.data["game_id"].unique()]
+        self.batched = list(map(lambda game: torch.tensor(game.values), gameDataframes))
+        self.labels = list(map(lambda game: torch.tensor(game.values.append([-1, -1])), gameDataframes))
+        self.numBatches = len(self.batched)
         self.index = 0
 
     def __len__(self):
@@ -18,19 +19,17 @@ class PBPDataset:
         if self.index >= self.numBatches:
             raise StopIteration
         else:
-            batch = self.data.iloc[self.index]
+            batch = self.batched[self.index]
+            labels = self.labels[self.index]
             self.index += 1
-            return batch
+            return batch, labels
 
     def __iter__(self):
         return self
 
 
-if __name__ == "__main__":
-    ds = PBPDataset("data/pbp_final_small.csv")
-    print(ds.__len__())
-    print(type(ds.__next__()))
-    print(ds.__next__())
-    print(ds.__next__().values)
-    print(ds.__next__().values.shape)
-    
+# if __name__ == "__main__":
+#     ds = PBPDataset("../data/pbp_final_small.csv")
+#     print(ds.__len__())
+#     print(ds.__next__())
+#     print(ds.__next__())
