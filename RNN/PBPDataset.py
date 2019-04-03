@@ -22,7 +22,7 @@ class PBPDataset:
         else:
             batch = self.batched[self.index]
             labels = self.labels[self.index]
-            self.index += 1
+            # self.index += 1
             return batch, labels
 
     def __iter__(self):

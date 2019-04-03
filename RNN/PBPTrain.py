@@ -5,30 +5,21 @@ import torch
 torch.manual_seed(1)
 
 def main():
-    # Read in data
     playData = PBPDataset('../data/pbp_final_small.csv')
 
-    rnn = PBPModel(2, 2)
+    rnn = PBPModel(2, 2, numLayers=2)
 
-    optimizer = torch.optim.Adam(rnn.parameters(), lr=0.1)
+    optimizer = torch.optim.Adam(rnn.parameters(), lr=1)
 
-    print(rnn)
-    
     for batch, labels in playData:
 
-        initHidden = rnn.init_hidden(1)
+        hidden, loss = rnn.init_hidden(1), 0
+        for inputPoint, label in zip(batch[0], labels[0]):
+            output, hidden = rnn(inputPoint.view(1, 1, 2), hidden)
+            loss += rnn.cost(output, label)
 
-        output, _ = rnn(batch, initHidden)
-
-        print(output.size())
-        print(output.type())
-        print(labels.size())
-        print(labels.type())
-
-        loss = rnn.cost(output, labels)
-        
-        print("loss")
         print(loss)
+        optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
