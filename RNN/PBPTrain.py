@@ -22,6 +22,8 @@ def main():
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+    
+    torch.save(rnn, "model/test.pt")
 
 if __name__ == "__main__":
     main()
