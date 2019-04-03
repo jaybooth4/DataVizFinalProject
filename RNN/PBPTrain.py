@@ -7,11 +7,11 @@ torch.manual_seed(1)
 def main():
     playData = PBPDataset('../data/pattern.csv')
 
-    rnn = PBPModel(2, 2, numLayers=1)
+    rnn = PBPModel(2, 2, numLayers=3)
 
     optimizer = torch.optim.Adam(rnn.parameters(), lr=.1)
 
-    for epoch in range(10):
+    for epoch in range(40):
         for batch, labels in playData:
 
             hidden, loss = rnn.init_hidden(1), 0
@@ -21,8 +21,7 @@ def main():
                 # print(inputPoint)
                 # print(label)
                 # print(output)
-                print(output)
-                print(label)
+                # print(hidden)
                 loss += rnn.cost(output, label)
 
             print(loss)

@@ -6,10 +6,12 @@ import numpy as np
 class PBPDataset:
 
     def __init__(self, CSVFile):
-        self.data = pd.read_csv(CSVFile)[["game_id", "event_coord_x", "event_coord_y"]]
-        gameDataframes = [self.data.loc[self.data["game_id"] == game_id, ["event_coord_x", "event_coord_y"]] for game_id in self.data["game_id"].unique()]
-        self.batched = list(map(lambda game: torch.tensor(game.values, dtype=torch.float).view(1, -1, 2), gameDataframes))
-        self.labels = list(map(lambda game: torch.tensor(np.append(game.values[1:], np.array([.5, .5])).reshape(-1, 2), dtype=torch.float).view(1, -1, 2), gameDataframes))
+        data = pd.read_csv(CSVFile)[["game_id", "event_coord_x", "event_coord_y"]]
+        data["event_coord_x"] = data["event_coord_x"] / 1128.0
+        data["event_coord_y"] = data["event_coord_y"] / 600.0
+        gameDataframes = [data.loc[data["game_id"] == game_id, ["event_coord_x", "event_coord_y"]] for game_id in data["game_id"].unique()]
+        self.batched = list(map(lambda game: torch.tensor(game.values[:-1], dtype=torch.float).view(1, -1, 2), gameDataframes))
+        self.labels = list(map(lambda game: torch.tensor(game.values[1:], dtype=torch.float).view(1, -1, 2), gameDataframes))
         self.numBatches = len(self.batched)
         self.index = 0
 

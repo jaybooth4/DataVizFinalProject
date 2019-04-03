@@ -10,7 +10,7 @@ class PBPModel(nn.Module):
         self.inputSize = inputSize
         self.hiddenSize = hiddenSize
         self.numLayers = numLayers
-        self.rnn = nn.RNN(input_size=inputSize, hidden_size=hiddenSize, num_layers=numLayers, batch_first=batchFirst)
+        self.rnn = nn.GRU(input_size=inputSize, hidden_size=hiddenSize, num_layers=numLayers, batch_first=batchFirst)
         self.loss = torch.nn.L1Loss()
 
     def forward(self, inputData, hidden):

@@ -13,7 +13,7 @@ def main():
     for _ in range(10):
         output, hidden = rnn(output.view(1, 1, 2), hidden)
         outputs.append(output)
-    print(outputs)
+    print(list(map(lambda event: (float(event[0][0][0]) * 1128, float(event[0][0][1]) * 600), outputs)))
 
 if __name__ == "__main__":
     main()
