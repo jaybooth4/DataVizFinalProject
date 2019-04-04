@@ -1,6 +1,6 @@
 *.json
 .ipynb*
 *.pyc
-*.csv
+data/*
 __pycache__
 __pycache__/*
