@@ -14,8 +14,6 @@ class PBPDataset:
 
     def __init__(self, CSVFile):
         data = pd.read_csv(CSVFile)[["game_id"] + FEATURES]
-        # data["event_coord_x"] = data["event_coord_x"] / 1128.0
-        # data["event_coord_y"] = data["event_coord_y"] / 600.0
         gameDataframes = [data.loc[data["game_id"] == game_id, FEATURES] for game_id in data["game_id"].unique()]
         self.batched = list(map(lambda game: torch.tensor(game.values[:-1], dtype=torch.float).view(-1, 1, 1, len(FEATURES)), gameDataframes))
         self.labels = list(map(lambda game: torch.tensor(game.values[1:], dtype=torch.float).view(-1, 1, 1, len(FEATURES)), gameDataframes))

@@ -14,8 +14,6 @@ def main():
     for _ in range(10):
         output, hidden = rnn(output, hidden)
         outputs.append(output)
-
-    outputs = list(map(lambda event: (float(event[0][0][0]), float(event[0][0][1]), float(event[0][0][2]), float(regularize(event[0][0][3]))), outputs))
     print(outputs)
 
 if __name__ == "__main__":
