@@ -4,11 +4,6 @@ from torch.nn.utils.rnn import pad_packed_sequence
 import numpy as np
 
 FEATURES = ["event_coord_x", "event_coord_y", "elapsed_time_sec", "category"]
-# FEATURES = ["event_coord_x", "event_coord_y", "elapsed_time_sec"]
-# FEATURES = ["elapsed_time_sec"]
-# FEATURES = ["event_coord_x", "event_coord_y", "category"]
-# FEATURES = ["event_coord_x", "event_coord_y"]
-# FEATURES = ["category"]
 
 class PBPDataset:
 

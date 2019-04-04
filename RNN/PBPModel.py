@@ -19,3 +19,6 @@ class PBPModel(nn.Module):
 
     def init_hidden(self, batch_size):
         return torch.zeros(self.numLayers, batch_size, self.hiddenSize, dtype=torch.float)
+    
+    def init_input(self, batch_size):
+        return torch.zeros(self.numLayers, batch_size, self.inputSize, dtype=torch.float)

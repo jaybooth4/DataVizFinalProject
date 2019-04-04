@@ -13,14 +13,14 @@ def main():
     rnn = PBPModel(4, 10, numLayers=1)
     optimizer = torch.optim.Adam(rnn.parameters(), lr=.01)
 
-    for epoch in range(3000):
+    for epoch in range(1500):
         for batch, labels in playData:
             hidden, loss = rnn.init_hidden(BATCHSIZE), 0
             for inputPoint, label in zip(batch, labels):
                 output, hidden = rnn(inputPoint, hidden)
                 loss += lossXY(output[0][0][0:2], label[0][0][0:2])
                 loss += lossL1(output[0][0][2], label[0][0][2])
-                loss += lossL1(output[0][0][3], label[0][0][3])
+                loss += 5 * lossL1(output[0][0][3], label[0][0][3])
             print(loss)
             optimizer.zero_grad()
             loss.backward()

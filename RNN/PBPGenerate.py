@@ -8,7 +8,7 @@ def main():
     rnn = torch.load("model/test.pt")
 
     hidden = rnn.init_hidden(1)
-    output = torch.tensor([[[0,0,0,0]]], dtype=torch.float)
+    output = rnn.init_input(1)
     outputs = []
     regularize = torch.nn.Sigmoid()
     for _ in range(10):
