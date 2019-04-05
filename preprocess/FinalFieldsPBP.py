@@ -1,15 +1,15 @@
 import pandas as pd
 
-IN_FILE_NAME = "../data/pbp_from_query_ordered_small.csv"
-OUT_FILE_NAME = "../data/pbp_preprocessed_small.csv"
-DROP_COLS = ['turnover_type', 'rebound_type', 'timeout_duration', 'event_id', 'event_description', 'shot_type', 'shot_subtype', 'type', 'shot_made', 'three_point_shot']
+IN_FILE_NAME = "../data/pbp_from_query_ordered.csv"
+OUT_FILE_NAME = "../data/pbp_preprocessed.csv"
+DROP_COLS = ['game_clock', 'turnover_type', 'rebound_type', 'timeout_duration', 'event_id', 'event_description', 'shot_type', 'shot_subtype', 'type', 'shot_made', 'three_point_shot']
 CAT_VARS = ['team_basket', 'event_type']
 FILL_NA = 'points_scored'
 
 
 def dropCols(pbpDF, dropCols):
     # Drops unneeded columns
-    return pbpDF.drop(["Unnamed: 0"] + dropCols, 1)
+    return pbpDF.drop(dropCols, 1)
 
 def fillNA(pbpDF, col, value):
     # Fill a column with a given value
