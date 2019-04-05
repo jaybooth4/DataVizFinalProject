@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<head>
+    <script src="scripts/d3.v5.min.js"></script>
+    <style>
+        body {
+            font-size: 30px;
+            font-family: arial;
+            text-align: center;
+            padding: 0;
+        }
+
+        .court {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .game_clock {
+            position: absolute;
+            left: 524px;
+            top: 600px;
+            height: 40px;
+            width: 80px;
+            align-content: center;
+        }
+
+        .legend {
+            font-size: 20px;
+            position: absolute;
+            left: 1128px;
+            top: 0px;
+        }
+
+        .current_play_label {
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        var width = 1128;
+        var height = 600;
+
+        // Court
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("class", "court")
+            .attr("width", width)
+            .attr("height", height);
+        svg.append("image")
+            .attr("class", "court")
+            .attr("xlink:href", "data/NCAA-court.png")
+            .attr("width", width)
+            .attr("height", height);
+
+        // Game Clock
+        var game_clock = d3.select("body")
+            .append("svg")
+            .attr("class", "game_clock")
+            .append("g")
+            .append("text")
+            // .text("00:00")
+            .attr("dy", 24);
+
+        // Legend
+        var legendData = [
+            {
+                "text": "home team",
+                "color": "red",
+                "symbol": d3.symbolSquare,
+                "transform": "translate(10,10)"
+            },
+            {
+                "text": "away team",
+                "color": "blue",
+                "symbol": d3.symbolSquare,
+                "transform": "translate(10,10)"
+            },
+            {
+                "text": "shot made",
+                "color": "black",
+                "symbol": d3.symbolStar,
+                "transform": "translate(10,10)"
+            },
+            {
+                "text": "shot missed",
+                "color": "black",
+                "symbol": d3.symbolCross,
+                "transform": "translate(10,10) rotate(45)"
+            }
+        ]
+        var legend = d3.select("body")
+            .append("svg")
+            .attr("class", "legend")
+            .selectAll("g")
+            .data(legendData)
+            .enter()
+            .append("g")
+            .attr("transform", (d,i) => "translate(0,"+i*20+")");
+        legend.append("path")
+            .attr("d", d => d3.symbol().type(d.symbol)())
+            .style("fill", d => d.color)
+            .attr("transform", d => d.transform);
+        legend.append("text")
+            .attr("x", 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .text(d => d.text);
+
+        // Current Play
+        var current_play_radius = 10;
+        var current_play = svg.append("g")
+            .attr("class", "current_play");
+
+        // (function tick() {
+        //     var secondsLeft = 1200;
+
+        //     var clockMinutesLeft = Math.floor(secondsLeft / 60);
+        //     var clockSecondsLeft = secondsLeft % 60;
+
+        //     var clockMinutesLeftString = (clockMinutesLeft < 10 ? "0" : "") + clockMinutesLeft.toString(); 
+        //     var clockSecondsLeftString = (clockSecondsLeft < 10 ? "0" : "") + clockSecondsLeft.toString();
+
+        //     svg.append("text")
+        //         .text(clockMinutesLeftString + ":" + clockSecondsLeftString)
+        //         .attr("y", height/2)
+        //         .attr("dx", width/2)
+        
+        // })();
+
+        (function main() {
+            var step = 0;
+            var place_in_data = 0;
+            var pbp_data = d3.csv("data/sample_pbp_50.csv");
+
+            var t = d3.interval(elapsed => {                
+                pbp_data.then(data => {   
+                    var play_data = data[step];
+
+                    // Update game clock
+                    game_clock.text(play_data.game_clock)
+
+                    // Remove the last play
+                    current_play.selectAll("path").remove();
+                    current_play.selectAll("text").remove();
+
+                    var event_type_mapping = new Map([
+                        ["threepointmade", { "symbol": d3.symbolStar, "transform": "" }],
+                        ["threepointmiss", { "symbol": d3.symbolCross, "transform": "rotate(45)" }],
+                        ["twopointmade", {"symbol": d3.symbolStar, "transform": "" }],
+                        ["twopointmiss", { "symbol": d3.symbolCross, "transform": "rotate(45)" }],
+                    ])
+
+                    // Draw the current play (if we have x/y data)
+                    if (play_data.event_coord_x && play_data.event_coord_y) {
+                        var event_type_info = event_type_mapping.get(play_data.event_type);
+
+                        console.log("event_type: ", play_data.event_type)
+                        console.log((event_type_info ? event_type_info.transform : "") + " translate("+ play_data.event_coord_x + "," + play_data.event_coord_y + ") scale(1.5) ")
+
+                        current_play.append("path")
+                            .attr("d", d3.symbol().type(event_type_info ? event_type_info.symbol : d3.symbolSquare)())
+                            .style("fill", play_data.possession_team_id ? (play_data.possession_team_id === play_data.home_id ? "red" : "blue") : "black")
+                            .attr("transform", "translate("+ play_data.event_coord_x + "," + play_data.event_coord_y + ") scale(1.5) " + (event_type_info ? event_type_info.transform : ""));
+
+                        current_play.append("text")
+                            .attr("class", "current_play_label")
+                            .text(play_data.event_type)
+                            .attr("x", play_data.event_coord_x - 10)
+                            .attr("y", play_data.event_coord_y - 10);
+                    }
+
+                    // Stop condition
+                    if (step + 1 >= data.length) t.stop();
+                })
+                step = step + 1;
+            }, 1000);
+        })();
+    </script>
+</body>

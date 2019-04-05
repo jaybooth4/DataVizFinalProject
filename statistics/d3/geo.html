@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!-- Basic US-States Map, that we can then plot our data on -->
+<!-- Created by following this example: https://bl.ocks.org/mbostock/4136647 
+    and this example: http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922 -->
+<head>
+    <script src="scripts/d3.v5.min.js"></script>
+    <script src="scripts/topojson.v2.min.js"></script>
+
+    <style>
+        .states {
+            fill: #cccccc;
+            stroke: #fff;
+        }
+        .state-borders {
+            fill: none;
+            stroke: #fff;
+            stroke-width: 0.5px;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+            pointer-events: none;
+        }
+        .cities {
+            fill: palevioletred;
+        }
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            width: 60px;
+            height: 28px;
+            padding: 2px;
+            background: white;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+            font: 12px seriff;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        var width = 960;
+        var height = 600;
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        var tooltip = d3.select("body")
+                        .append("div")
+                        .attr("class", "tooltip")
+                        .style("opacity", 0);
+
+        var path = d3.geoPath();
+        var projection = d3.geoAlbersUsa().scale(1280).translate([480, 300])
+
+        var us_data = d3.json("data/us-10m.v1.json");
+        var cities_data = d3.csv("data/cities-played.csv");
+
+        Promise.all([us_data, cities_data]).then(([us, cities]) => {
+            svg.append("g")
+                .attr("class", "states")
+                .selectAll("path")
+                .data(topojson.feature(us, us.objects.states).features)
+                .enter().append("path")
+                .attr("d", path)
+                .style("stroke", "#fff")
+                .style("stroke-width", "1")
+                .style("fill", "rgb(213,222,217)");
+
+            svg.append("path")
+                .attr("class", "state-borders")
+                .attr("d", path(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; })));
+
+            svg.selectAll("circle")
+                .data(cities)
+                .enter()
+                .append("circle")
+                .attr("class", "cities")
+                .attr("cx", d => projection([d.lon, d.lat])[0])
+                .attr("cy", d => projection([d.lon, d.lat])[1])
+                .attr("r", d => Math.sqrt(d.years)*4)
+                .on("mouseover", d => {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 1);
+                    tooltip.text(d.place)
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px")
+                })
+                .on("mouseout", d => {
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0)
+                });
+        })
+    </script>
+</body>
