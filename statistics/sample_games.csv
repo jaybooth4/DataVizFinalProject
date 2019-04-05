@@ -1,0 +1,51 @@
+,game_id,season,scheduled_date,venue_city,venue_state,venue_name,h_alias,a_alias
+0,8c8d2a48-2335-4acd-8304-8658b7c4f193,2017,2018-03-02,Seattle,WA,Alaska Airlines Arena at Hec Edmundson Pavilion,WASH,ORST
+1,0910b42c-d65f-44da-8076-f1bfcf2b3399,2017,2018-03-02,Tempe,AZ,Wells Fargo Arena,ASU,CAL
+2,b0cf1cc3-85c3-4a81-84a9-5c45624e0dfa,2017,2018-03-02,Pullman,WA,Beasley Coliseum,WSU,ORE
+3,4eb7e921-ecf2-4c3c-af68-590d44b9c717,2017,2018-03-02,Tuscon,AZ,McKale Center,ARIZ,STAN
+4,9fd12195-25c0-4a97-8ea9-c2308b538d6b,2017,2018-03-04,Los Angeles,CA,Galen Center,USC,UCLA
+5,eea7d885-259d-40f4-af21-1dbd4a9b2fc0,2017,2018-03-03,Pullman,WA,Beasley Coliseum,WSU,ORST
+6,8828e406-8579-4c94-b83a-ce1a5ea9b06a,2017,2018-03-03,Tuscon,AZ,McKale Center,ARIZ,CAL
+7,02b0446c-9bd0-4baf-a22d-d453e3b2ce06,2017,2018-03-04,Salt Lake City,UT,Jon M. Huntsman Center,UTAH,COLO
+8,985e4b81-ff85-471b-b4bd-6bba0f00b8bb,2017,2018-03-03,Seattle,WA,Alaska Airlines Arena at Hec Edmundson Pavilion,WASH,ORE
+9,0a9244af-829e-446e-bddf-fff4ed3222db,2017,2018-03-03,Tempe,AZ,Wells Fargo Arena,ASU,STAN
+10,f67a64ac-4650-493f-84d3-7d7e2d6cacaf,2017,2017-12-17,Portland,OR,Moda Center,ORST,SLU
+11,009d90ee-d14f-4325-b236-6db430336aa1,2017,2017-12-16,Stanford,CA,Maples Pavilion,STAN,DEN
+12,b5541ab3-fcd0-4f6c-8bd8-152812cc3ab0,2017,2017-11-15,Stanford,CA,Maples Pavilion,STAN,EWU
+13,10e139fd-c94d-4f57-a9f3-36fd5a1c08f3,2017,2017-11-13,Stanford,CA,Maples Pavilion,STAN,PAC
+14,c39f7290-26ba-4ac9-b5fb-7a919687676c,2017,2017-11-30,Stanford,CA,Maples Pavilion,STAN,MONT
+15,b8cacd33-afd1-45f8-9efb-6fe86fb8de7a,2017,2018-02-03,Stanford,CA,Maples Pavilion,STAN,ORE
+16,63cfdb21-0908-4b91-9ce2-0320a168bdf2,2017,2018-01-05,Stanford,CA,Maples Pavilion,STAN,UCLA
+17,29efc952-6dc6-4c60-abed-7b22fd7446b0,2017,2018-01-08,Stanford,CA,Maples Pavilion,STAN,USC
+18,5d95a859-57c7-40ef-941a-cd8ca8b625c7,2017,2017-12-17,Stanford,CA,Maples Pavilion,STAN,SF
+19,ac0a48b8-e28c-4da4-9a08-9348c2211034,2017,2017-12-31,Stanford,CA,Maples Pavilion,STAN,CAL
+20,f6e8ddf7-979e-4b9f-a1cf-2d5a752dd5f1,2017,2018-01-18,Stanford,CA,Maples Pavilion,STAN,ASU
+21,8ba64e89-bb81-447b-9dc7-723563d716fc,2017,2018-02-25,Stanford,CA,Maples Pavilion,STAN,WSU
+22,c7debb06-98b7-4094-89af-235aa242eeea,2017,2017-11-17,Stanford,CA,Maples Pavilion,STAN,NE
+23,90e7ecfe-158b-4e19-9a2b-b81333836477,2017,2018-02-02,Stanford,CA,Maples Pavilion,STAN,ORST
+24,4a69f3d8-c635-41a9-a691-903d946c5e10,2017,2018-01-20,Stanford,CA,Maples Pavilion,STAN,ARIZ
+25,52f40c07-82b2-46f8-9c47-76bd2b340e5e,2017,2018-02-23,Stanford,CA,Maples Pavilion,STAN,WASH
+26,02ed6ef0-6d3a-4e2c-a919-5a5e103201db,2017,2017-12-20,Los Angeles,CA,Pauley Pavilion,UCLA,SDAK
+27,42f3e126-ae92-42b6-a1d7-e40ab8b0c281,2017,2018-01-12,Los Angeles,CA,Pauley Pavilion,UCLA,UTAH
+28,44bc3763-e217-455d-b8f6-814114b53f60,2017,2017-11-18,Los Angeles,CA,Pauley Pavilion,UCLA,SCST
+29,dcb1beca-0660-4889-8aac-2bfc0a7d6edc,2017,2018-02-03,Los Angeles,CA,Pauley Pavilion,UCLA,USC
+30,0f400816-253e-4cd3-96c8-9f3d6f401855,2017,2018-01-01,Los Angeles,CA,Pauley Pavilion,UCLA,WASH
+31,e3bf2a44-4d7f-497f-bcf3-d62a2bf00f9b,2017,2018-02-18,Los Angeles,CA,Pauley Pavilion,UCLA,ORE
+32,6b66da9a-ef1b-424f-987e-324e9205baec,2017,2018-01-26,Los Angeles,CA,Pauley Pavilion,UCLA,CAL
+33,714b53ab-3c9a-4ad6-acf2-9501196b5dc7,2017,2017-12-30,Los Angeles,CA,Pauley Pavilion,UCLA,WSU
+34,bb1b5af7-4370-4f21-b421-8d0ab9155b68,2017,2018-01-14,Los Angeles,CA,Pauley Pavilion,UCLA,COLO
+35,3cda9cba-8751-4ad1-ba17-775ed25a4fde,2017,2017-11-16,Los Angeles,CA,Pauley Pavilion,UCLA,CARK
+36,400fc465-8661-417a-a316-d922ad50ffd3,2017,2017-11-30,Los Angeles,CA,Pauley Pavilion,UCLA,CSB
+37,a14d04c2-6983-477c-8180-c2701244ad18,2017,2017-12-04,Los Angeles,CA,Pauley Pavilion,UCLA,DET
+38,c6b3722b-67d0-4afa-9701-beb376283ee1,2017,2017-11-26,Los Angeles,CA,Pauley Pavilion,UCLA,UCI
+39,6de6e333-a59f-41f3-a33e-9f77debb0173,2017,2018-01-28,Los Angeles,CA,Pauley Pavilion,UCLA,STAN
+40,f83686fc-578e-42d5-9f28-3b0134120495,2017,2018-02-16,Los Angeles,CA,Pauley Pavilion,UCLA,ORST
+41,410fc1c5-33c7-4887-ac6d-e0c628ae9389,2017,2017-12-16,Los Angeles,CA,Pauley Pavilion,UCLA,CIN
+42,4865b3d8-78fc-4e19-920c-6e2db172b94b,2017,2017-12-16,Boulder,CO,Coors Events Center,COLO,SDST
+43,bcbcc18a-4e03-447c-8d69-f4f6c70eb3e7,2017,2018-01-20,Boulder,CO,Coors Events Center,COLO,WASH
+44,87854d35-c79c-40ec-8ff4-4ba9b6b03d2c,2017,2018-01-05,Boulder,CO,Coors Events Center,COLO,ASU
+45,2ff476c3-81a0-4cc3-aca4-747a96fe4a2c,2017,2017-12-07,Boulder,CO,Coors Events Center,COLO,UNM
+46,57caf3b3-41fe-41fa-8e42-cc33f66a2f46,2017,2018-02-08,Boulder,CO,Coors Events Center,COLO,CAL
+47,d4cc2206-3bdb-4927-b4b4-9471b77db421,2017,2018-01-06,Boulder,CO,Coors Events Center,COLO,ARIZ
+48,b31fa9a3-09a7-4b7f-a937-8d997656ca15,2017,2018-02-03,Boulder,CO,Coors Events Center,COLO,UTAH
+49,471384d3-2cd5-42c8-892b-389ff66a06a7,2017,2018-02-25,Boulder,CO,Coors Events Center,COLO,UCLA
