@@ -26,3 +26,10 @@ Questionable:
 game_clock: Time left in the period in minutes
 period: This field indicates which period the event occured in. "1" is the first 20-minute half, "2" is the second 20-minute half, "3" is the first OT, "4" is the second OT, etc.
 team_name: name of the team that the event is attributed to
+
+
+Future:
+-How to weight the cost functions appropriately
+-How to choose optimizer and optimizer params
+-Graph training loss
+-Think of way to assess model (cross-validate to make sure not overfitting, graph for visual confirmation)
