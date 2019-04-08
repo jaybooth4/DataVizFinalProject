@@ -27,12 +27,12 @@ def main():
     #extractTable("concrete-fabric-234819", "player_data_table", "PlayerData", "playerquery")
     #downloadBlob("playerquery", "PlayerData-000000000000", "PlayerData.csv")
 
-    X,y = preprocessPlayerData()
+    #X,y = preprocessPlayerData()
     #X_test, y_test, y_pred, y_score = runLogisticRegression(X,y)
     #X_test, y_test, y_pred, y_score = runSVM(X,y)
-    X_test, y_test, y_pred, y_score = runDecTree(X,y)
+    #X_test, y_test, y_pred, y_score = runDecTree(X,y)
 
-    getROC(X_test, y_test, y_pred, y_score)
+    #getROC(X_test, y_test, y_pred, y_score)
     #getHeatMap(X_test, y_test, y_pred, y_score)
     #getTSNE(X_test, y_test, y_pred, y_score)
 

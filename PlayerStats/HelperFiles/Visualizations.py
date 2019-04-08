@@ -43,8 +43,11 @@ def getHeatMap(X_test, y_test, y_pred, y_score):
     print(confusion_matrix)
     df_cm = pd.DataFrame(confusion_matrix, index = ["Actually False", "Actually True"],
                     columns = ["Predicted False", "Predicted True"])
-    plt.figure(figsize = (10,7))
-    sns.heatmap(df_cm, annot=True,fmt="d",cmap="YlGnBu")
+    #plt.figure(figsize = (10,7))
+    sns_plot = sns.heatmap(df_cm, annot=True,fmt="d",cmap="YlGnBu")
+    #sns_plot.savefig("HEATMAP")
+    fig = sns_plot.get_figure()
+    fig.savefig("HEATMAP") 
 
 def getTSNE(X_test, y_test, y_pred, y_score):
     #
@@ -57,6 +60,7 @@ def getTSNE(X_test, y_test, y_pred, y_score):
     X_reduced_tsne = tsne.fit_transform(X_test)
     plt.figure(2, figsize=(30, 20),)
     plt.scatter(X_reduced_tsne[:,0], X_reduced_tsne[:,1],s=100, c=y_test.values.ravel(), alpha=0.4)
+    plt.savefig('TSNE')
 
 if __name__ == '__main__':
     extractTable("concrete-fabric-234819", "player_data_table", "PlayerData", "playerquery")
