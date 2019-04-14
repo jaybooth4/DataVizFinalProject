@@ -4,7 +4,6 @@ import torch
 
 torch.manual_seed(1)
 
-BATCHSIZE = 1
 lossMSE = torch.nn.MSELoss()
 lossCrossEntropy = torch.nn.CrossEntropyLoss()
 
@@ -27,16 +26,19 @@ def extractLabelFields(label):
     
     return timeLabel, xyLabel, ptsScoredLabel, leftRightLabel, eventTypeLabel
 
+
+
 def main():
-    playData = PBPDataset('../data/pbp_preprocessed_small.csv')
+    playData = PBPDataset('../data/pbp_preprocessed_100k.csv')
+    print("Read data...")
     featureSize = playData.getFeatureLength()
     rnn = PBPModel(featureSize, featureSize * 2, numLayers=1)
-    optimizer = torch.optim.Adam(rnn.parameters(), lr=.01)
+    optimizer = torch.optim.Adam(rnn.parameters(), lr=.015)
 
-    for epoch in range(1):
+    for epoch in range(2):
         gameNum = 0
         for batch, labels in playData:
-            hidden, loss = rnn.init_hidden(BATCHSIZE), 0
+            hidden, loss = rnn.init_hidden(), 0
             for inputPoint, label in zip(batch, labels):
                 output, hidden = rnn(inputPoint, hidden)
 
@@ -44,25 +46,19 @@ def main():
                 timeLabel, xyLabel, ptsScoredLabel, leftRightLabel, eventTypeLabel = extractLabelFields(label)
 
                 loss += lossMSE(time, timeLabel)
-                # print(lossMSE(time, timeLabel))
                 loss += lossMSE(xy, xyLabel)
-                # print(lossMSE(xy, xyLabel))
                 loss += lossMSE(ptsScored, ptsScoredLabel)
-                # print(lossMSE(ptsScored, ptsScoredLabel))
                 loss += lossCrossEntropy(leftRight, leftRightLabel)
-                # print(lossCrossEntropy(leftRight, leftRightLabel))
                 loss += lossCrossEntropy(eventType, eventTypeLabel)
-                # print(lossCrossEntropy(eventType, eventTypeLabel))
-
 
             print("Game number: " + str(gameNum))
-            print(loss)
+            print("Loss: " + str(loss))
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
             gameNum += 1
     
-    torch.save(rnn, "model/small.pt")
+    torch.save(rnn, "model/full.pt")
 
 if __name__ == "__main__":
     main()
