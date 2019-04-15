@@ -23,7 +23,7 @@ def getROC(X_test, y_test, y_pred, y_score):
     logit_roc_auc = roc_auc_score(y_test, y_score)
     fpr, tpr, thresholds = roc_curve(y_test, y_score) # gets false pos rate, true pr, and thresh
     plt.figure()
-    plt.plot(fpr, tpr, label='Logistic Regression (area = %0.2f)' % logit_roc_auc)
+    plt.plot(fpr, tpr, label='(area = %0.2f)' % logit_roc_auc)
     plt.plot([0, 1], [0, 1],'r--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
@@ -31,7 +31,7 @@ def getROC(X_test, y_test, y_pred, y_score):
     plt.ylabel('True Positive Rate')
     plt.title('Receiver operating characteristic')
     plt.legend(loc="lower right")
-    plt.savefig('Log_ROC')
+    plt.savefig('ROC')
     #plt.show()
 
 def getHeatMap(X_test, y_test, y_pred, y_score):

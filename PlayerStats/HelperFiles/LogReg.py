@@ -46,6 +46,8 @@ def runLogisticRegression(X,y,weight='balanced'):
     #y_score = logreg.predict_proba(X_test) # returns probs that data points belong to neg and pos classes
     #only keep pos probs actually
     y_score = logreg.predict_proba(X_test)[:,1]
+    print("\n\n\n")
+    print(logreg.score(X,y.values.ravel()))
 
     return X_test, y_test, y_pred, y_score
 

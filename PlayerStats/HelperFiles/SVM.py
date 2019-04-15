@@ -32,8 +32,10 @@ def runSVM(X,y,weight='balanced'):
         svc = svm.SVC(gamma="scale",class_weight=weight)
 
         # Set the parameters by cross-validation
-        tuned_parameters = [{'kernel': ['rbf'], 'gamma': [10, 1, 0.1],
-                        'C': [0.001, 0.01,0.1]},]
+        # tuned_parameters = [{'kernel': ['rbf'], 'gamma': [10, 1, 0.1],
+        #                 'C': [0.001, 0.01,0.1]},]
+        tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1],
+                         'C': [0.01]},]
                         #{'kernel': ['linear'], 'C': [0.01, 0.1, 1, 10, 100, 1000]}
 
         scores = ['precision', 'recall']
@@ -76,6 +78,8 @@ def runSVM(X,y,weight='balanced'):
         y_pred = clf2.predict(X_test)
         y_score = clf2.predict_proba(X_test)[:,1]
 
+        print("\n\n\n")
+        print(clf2.score(X,y.values.ravel()))
         return X_test, y_test, y_pred, y_score
 
 

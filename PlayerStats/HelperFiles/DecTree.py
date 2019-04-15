@@ -15,6 +15,9 @@ def runDecTree(X,y,weight='balanced'):
         y_pred = clf.predict(X_test)
         y_score = clf.predict_proba(X_test)[:,1]
         
+        print("\n\n\n")
+        print(clf.score(X,y.values.ravel()))
+
         return X_test, y_test, y_pred, y_score
 
 
