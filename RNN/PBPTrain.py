@@ -58,7 +58,7 @@ def main():
             optimizer.step()
             gameNum += 1
     
-    torch.save(rnn, "model/full_no_0.pt")
+    torch.save(rnn, "model/full_no_0_2.pt")
 
 if __name__ == "__main__":
     main()
