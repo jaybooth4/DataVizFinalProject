@@ -55,7 +55,7 @@
         var projection = d3.geoAlbersUsa().scale(1280).translate([480, 300])
 
         var us_data = d3.json("data/us-10m.v1.json");
-        var cities_data = d3.csv("data/cities-played.csv");
+        var cities_data = d3.csv("data/2017_geo_data.csv");
 
         Promise.all([us_data, cities_data]).then(([us, cities]) => {
             svg.append("g")
@@ -77,19 +77,19 @@
                 .enter()
                 .append("circle")
                 .attr("class", "cities")
-                .attr("cx", d => projection([d.lon, d.lat])[0])
-                .attr("cy", d => projection([d.lon, d.lat])[1])
-                .attr("r", d => Math.sqrt(d.years)*4)
+                .attr("cx", d => projection([d.lng, d.lat])[0])
+                .attr("cy", d => projection([d.lng, d.lat])[1])
+                .attr("r", d => Math.sqrt(d.number_games)*4)
                 .on("mouseover", d => {
                     tooltip.transition()
                         .duration(200)
                         .style("opacity", 1);
-                    tooltip.text(d.place)
+                    tooltip.text(d.venue_city + ": " + d.number_games)
                         .style("left", (d3.event.pageX) + "px")
                         .style("top", (d3.event.pageY - 28) + "px")
                 })
                 .on("mouseout", d => {
-                    div.transition()
+                    tooltip.transition()
                         .duration(500)
                         .style("opacity", 0)
                 });
