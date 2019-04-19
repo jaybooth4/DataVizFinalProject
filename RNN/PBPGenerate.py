@@ -5,7 +5,7 @@ import pandas as pd
 
 torch.manual_seed(1)
 OUTFILE = "output/generateTest.csv"
-MODEL = "model/full.pt"
+MODEL = "model/full_no_0.pt"
 
 def main():
     rnn = torch.load(MODEL)
@@ -14,11 +14,13 @@ def main():
     output = rnn.init_input()
     outputs = []
 
-    for _ in range(10):
-        print("out")
-        print(output)
-        output, hidden = rnn(output, hidden)
-        outputs.append(output.tolist()[0][0])
+    playData = PBPDataset('../data/pbp_preprocessed_small.csv')
+
+    for batch, labels in playData:
+        hidden= rnn.init_hidden()
+        for inputPoint, label in zip(batch, labels):
+            output, hidden = rnn(inputPoint, hidden)
+            outputs.append(output.tolist()[0][0])
 
     df = pd.DataFrame(outputs)
     df.to_csv(OUTFILE, index=False, header=False)

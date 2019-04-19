@@ -1,8 +1,8 @@
 import pandas as pd
 
-IN_FILE_NAME = "../data/pbp_from_query_ordered.csv"
-OUT_FILE_NAME = "../data/pbp_preprocessed.csv"
-DROP_COLS = ['game_clock', 'turnover_type', 'rebound_type', 'timeout_duration', 'event_id', 'event_description', 'shot_type', 'shot_subtype', 'type', 'shot_made', 'three_point_shot']
+IN_FILE_NAME = "../data/pbp_subset_ordered_no_0.csv"
+OUT_FILE_NAME = "../data/pbp_preprocessed_no_0.csv"
+DROP_COLS = ['turnover_type', 'rebound_type', 'timeout_duration', 'event_id', 'event_description', 'shot_type', 'shot_subtype', 'type', 'shot_made', 'three_point_shot']
 CAT_VARS = ['team_basket', 'event_type']
 FILL_NA = 'points_scored'
 

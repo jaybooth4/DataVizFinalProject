@@ -29,13 +29,13 @@ def extractLabelFields(label):
 
 
 def main():
-    playData = PBPDataset('../data/pbp_preprocessed_100k.csv')
+    playData = PBPDataset('../data/pbp_preprocessed_no_0_100k.csv')
     print("Read data...")
     featureSize = playData.getFeatureLength()
     rnn = PBPModel(featureSize, featureSize * 2, numLayers=1)
     optimizer = torch.optim.Adam(rnn.parameters(), lr=.015)
 
-    for epoch in range(2):
+    for epoch in range(4):
         gameNum = 0
         for batch, labels in playData:
             hidden, loss = rnn.init_hidden(), 0
@@ -58,7 +58,7 @@ def main():
             optimizer.step()
             gameNum += 1
     
-    torch.save(rnn, "model/full.pt")
+    torch.save(rnn, "model/full_no_0.pt")
 
 if __name__ == "__main__":
     main()
