@@ -24,6 +24,26 @@
             align-content: center;
         }
 
+        .home_score_display {
+            font-size: 25px;
+            position: absolute;
+            left: 1128px;
+            top: 505px;
+            height: 30px;
+            width: 200px;
+            align-content: right;
+        }
+
+        .away_score_display {
+            font-size: 25px;
+            position: absolute;
+            left: 1128px;
+            top: 550px;
+            height: 30px;
+            width: 200px;
+            align-content: right;
+        }
+
         .legend {
             font-size: 20px;
             position: absolute;
@@ -59,7 +79,24 @@
             .attr("class", "game_clock")
             .append("g")
             .append("text")
-            // .text("00:00")
+            .attr("dy", 24);
+
+        // Home Score
+        var home_score_display = d3.select("body")
+            .append("svg")
+            .attr("class", "home_score_display")
+            .append("g")
+            .append("text")
+            .text("Home: 0")
+            .attr("dy", 24);
+
+        // Away Score
+        var away_score_display = d3.select("body")
+            .append("svg")
+            .attr("class", "away_score_display")
+            .append("g")
+            .append("text")
+            .text("Away: 0")
             .attr("dy", 24);
 
         // Legend
@@ -112,69 +149,150 @@
         var current_play = svg.append("g")
             .attr("class", "current_play");
 
-        // (function tick() {
-        //     var secondsLeft = 1200;
+        var events = [
+            "event_type_assist", 
+            "event_type_attemptblocked", 
+            "event_type_block", 
+            "event_type_flagrantone", 
+            "event_type_freethrowmade", 
+            "event_type_freethrowmiss", 
+            "event_type_jumpball", 
+            "event_type_kickball", 
+            "event_type_laneviolation", 
+            "event_type_lineupchange", 
+            "event_type_offensivefoul", 
+            "event_type_openinbound", 
+            "event_type_opentip", 
+            "event_type_personalfoul", 
+            "event_type_rebound", 
+            "event_type_shootingfoul", 
+            "event_type_teamtimeout", 
+            "event_type_technicalfoul", 
+            "event_type_threepointmade", 
+            "event_type_threepointmiss", 
+            "event_type_turnover", 
+            "event_type_twopointmade", 
+            "event_type_twopointmiss"
+        ];
 
-        //     var clockMinutesLeft = Math.floor(secondsLeft / 60);
-        //     var clockSecondsLeft = secondsLeft % 60;
+        var event_type_mapping = new Map([
+            ["threepointmade", { "symbol": d3.symbolStar, "transform": "" }],
+            ["threepointmiss", { "symbol": d3.symbolCross, "transform": "rotate(45)" }],
+            ["twopointmade", {"symbol": d3.symbolStar, "transform": "" }],
+            ["twopointmiss", { "symbol": d3.symbolCross, "transform": "rotate(45)" }],
+        ])
 
-        //     var clockMinutesLeftString = (clockMinutesLeft < 10 ? "0" : "") + clockMinutesLeft.toString(); 
-        //     var clockSecondsLeftString = (clockSecondsLeft < 10 ? "0" : "") + clockSecondsLeft.toString();
+        var homeTeamScore;
+        var awayTeamScore;
 
-        //     svg.append("text")
-        //         .text(clockMinutesLeftString + ":" + clockSecondsLeftString)
-        //         .attr("y", height/2)
-        //         .attr("dx", width/2)
-        
-        // })();
+        function which_event(play_data) {
+            for (var key of Object.keys(play_data)) {
+                if (key.startsWith("event_type_") && play_data[key] === "1") {
+                    return key.substring(11)
+                }
+            }
+            return null
+        }
+
+        function which_team(play_data, home_side) {
+            if (play_data["team_basket_left"] === "1") {
+                return home_side === "left" ? "home" : "away"
+            } else if (play_data["team_basket_right"] === "1") {
+                return home_side === "right" ? "home" : "away"
+            } 
+            return null
+        }
+
+        function draw_event(play_data, period) { //, homeTeamScore, awayTeamScore) {
+            // Draw the current play (if we have x/y data)
+            if (play_data.event_coord_x && play_data.event_coord_y) {
+                var event_type = which_event(play_data)
+
+                if (event_type) {
+                    var event_type_info = event_type_mapping.get(play_data.event_type);
+                    var team = which_team(play_data, period === 1 ? "left" : "right")
+
+                    current_play.append("path")
+                        .attr("d", d3.symbol().type(event_type_info ? event_type_info.symbol : d3.symbolSquare)())
+                        .style("fill", team === "home" ?  "red" : (team === "away" ? "blue" : "black"))
+                        .attr("transform", "translate("+ play_data.event_coord_x + "," + play_data.event_coord_y + ") scale(1.5) " + (event_type_info ? event_type_info.transform : ""));
+
+                    current_play.append("text")
+                        .attr("class", "current_play_label")
+                        .text(event_type)
+                        .attr("x", play_data.event_coord_x - 10)
+                        .attr("y", play_data.event_coord_y - 10);
+
+                    if (play_data.points_scored > 0) {
+                        console.log('shot made by team: ', team)
+                        console.log('scored: ', play_data.points_scored)
+                        console.log(play_data)
+
+                        if (team === 'home') {
+                            homeTeamScore = homeTeamScore + Number(play_data.points_scored);
+                            home_score_display.text("Home: " + homeTeamScore);
+                        } else {
+                            awayTeamScore = awayTeamScore + Number(play_data.points_scored);
+                            away_score_display.text("Away: " + awayTeamScore);
+                        }
+                    }
+                }
+            }
+        }
 
         (function main() {
-            var step = 0;
+            // var step = 0;
             var place_in_data = 0;
-            var pbp_data = d3.csv("data/sample_pbp_50.csv");
+            var secondsElapsed = 0;
+            var period = 1;
 
-            var t = d3.interval(elapsed => {                
-                pbp_data.then(data => {   
-                    var play_data = data[step];
+            homeTeamScore = 0;
+            awayTeamScore = 0;
+
+            var pbp_data = d3.csv("data/pbp_jay_format.csv");
+
+            var t = d3.interval(elapsed => {            
+                pbp_data.then(data => {
+
+                    // Loop stopping condition
+                    if (secondsElapsed > 2400) {
+                        t.stop();
+                    }
+
+                    // Format game clock
+                    var secondsLeft;
+                    if (secondsElapsed <= 1200) { // in period 1
+                        secondsLeft = 1200 - secondsElapsed;
+                    } else { // in period 2
+                        secondsLeft = 2400 - secondsElapsed;
+                    }
+                    var clockMinutesLeft = Math.floor(secondsLeft / 60);
+                    clockMinutesLeft = ((clockMinutesLeft < 10 ? "0" : "") + clockMinutesLeft); 
+                    var clockSecondsLeft = secondsLeft % 60;
+                    clockSecondsLeft = ((clockSecondsLeft < 10 ? "0" : "") + clockSecondsLeft);
+                    var current_time = clockMinutesLeft + ":" + clockSecondsLeft;
 
                     // Update game clock
-                    game_clock.text(play_data.game_clock)
+                    game_clock.text(current_time)
 
                     // Remove the last play
                     current_play.selectAll("path").remove();
                     current_play.selectAll("text").remove();
 
-                    var event_type_mapping = new Map([
-                        ["threepointmade", { "symbol": d3.symbolStar, "transform": "" }],
-                        ["threepointmiss", { "symbol": d3.symbolCross, "transform": "rotate(45)" }],
-                        ["twopointmade", {"symbol": d3.symbolStar, "transform": "" }],
-                        ["twopointmiss", { "symbol": d3.symbolCross, "transform": "rotate(45)" }],
-                    ])
+                    // Place all events that occur at "secondsElapsed" (can sometimes be multiple)
+                    while(1) {
+                        var play_data = data[place_in_data];
 
-                    // Draw the current play (if we have x/y data)
-                    if (play_data.event_coord_x && play_data.event_coord_y) {
-                        var event_type_info = event_type_mapping.get(play_data.event_type);
-
-                        console.log("event_type: ", play_data.event_type)
-                        console.log((event_type_info ? event_type_info.transform : "") + " translate("+ play_data.event_coord_x + "," + play_data.event_coord_y + ") scale(1.5) ")
-
-                        current_play.append("path")
-                            .attr("d", d3.symbol().type(event_type_info ? event_type_info.symbol : d3.symbolSquare)())
-                            .style("fill", play_data.possession_team_id ? (play_data.possession_team_id === play_data.home_id ? "red" : "blue") : "black")
-                            .attr("transform", "translate("+ play_data.event_coord_x + "," + play_data.event_coord_y + ") scale(1.5) " + (event_type_info ? event_type_info.transform : ""));
-
-                        current_play.append("text")
-                            .attr("class", "current_play_label")
-                            .text(play_data.event_type)
-                            .attr("x", play_data.event_coord_x - 10)
-                            .attr("y", play_data.event_coord_y - 10);
+                        if (play_data.elapsed_time_sec === secondsElapsed.toString()) {
+                            draw_event(play_data, period, homeTeamScore, awayTeamScore);
+                            place_in_data++;
+                        } else {
+                            secondsElapsed = secondsElapsed + 1;
+                            break;
+                        }
                     }
-
-                    // Stop condition
-                    if (step + 1 >= data.length) t.stop();
                 })
-                step = step + 1;
-            }, 1000);
+            }, 250);
         })();
     </script>
 </body>
