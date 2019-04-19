@@ -49,6 +49,7 @@
             position: absolute;
             left: 1128px;
             top: 0px;
+            height: 500px;
         }
 
         .current_play_label {
@@ -124,7 +125,37 @@
                 "color": "black",
                 "symbol": d3.symbolCross,
                 "transform": "translate(10,10) rotate(45)"
-            }
+            },
+            {
+                "text": "rule violation",
+                "color": "black",
+                "symbol": d3.symbolWye,
+                "transform": "translate(10,10)"
+            },
+            {
+                "text": "assist",
+                "color": "black",
+                "symbol": d3.symbolDiamond,
+                "transform": "translate(10,10)"
+            },
+            {
+                "text": "block",
+                "color": "black",
+                "symbol": d3.symbolSquare,
+                "transform": "translate(10,10)"
+            },
+            {
+                "text": "ball changed hands",
+                "color": "black",
+                "symbol": d3.symbolTriangle,
+                "transform": "translate(10,10)"
+            },
+            {
+                "text": "general game info",
+                "color": "black",
+                "symbol": d3.symbolCircle,
+                "transform": "translate(10,10)"
+            },
         ]
         var legend = d3.select("body")
             .append("svg")
@@ -150,29 +181,29 @@
             .attr("class", "current_play");
 
         var events = [
-            "event_type_assist", 
-            "event_type_attemptblocked", 
-            "event_type_block", 
-            "event_type_flagrantone", 
-            "event_type_freethrowmade", 
-            "event_type_freethrowmiss", 
-            "event_type_jumpball", 
-            "event_type_kickball", 
-            "event_type_laneviolation", 
+            "event_type_assist", // 
+            "event_type_attemptblocked", // 
+            "event_type_block", // 
+            "event_type_flagrantone", // violation
+            "event_type_freethrowmade",  // shot made
+            "event_type_freethrowmiss", // shot missed
+            "event_type_jumpball", // circle
+            "event_type_kickball", // violation
+            "event_type_laneviolation", // violation
             "event_type_lineupchange", 
-            "event_type_offensivefoul", 
+            "event_type_offensivefoul", // violation
             "event_type_openinbound", 
             "event_type_opentip", 
-            "event_type_personalfoul", 
+            "event_type_personalfoul", // violation
             "event_type_rebound", 
-            "event_type_shootingfoul", 
+            "event_type_shootingfoul", // violation
             "event_type_teamtimeout", 
-            "event_type_technicalfoul", 
-            "event_type_threepointmade", 
-            "event_type_threepointmiss", 
+            "event_type_technicalfoul", // violation 
+            "event_type_threepointmade", // shot made
+            "event_type_threepointmiss", // shot missed
             "event_type_turnover", 
-            "event_type_twopointmade", 
-            "event_type_twopointmiss"
+            "event_type_twopointmade", // shot made
+            "event_type_twopointmiss" // shot missed
         ];
 
         var event_type_mapping = new Map([
@@ -180,36 +211,57 @@
             ["threepointmiss", { "symbol": d3.symbolCross, "transform": "rotate(45)" }],
             ["twopointmade", {"symbol": d3.symbolStar, "transform": "" }],
             ["twopointmiss", { "symbol": d3.symbolCross, "transform": "rotate(45)" }],
+            ["freethrowmade", {"symbol": d3.symbolStar, "transform": "" }],
+            ["freethrowmiss", { "symbol": d3.symbolCross, "transform": "rotate(45)" }],
+            ["flagrantone", { "symbol": d3.symbolWye, "transform": "" }],
+            ["kickball", { "symbol": d3.symbolWye, "transform": "" }],
+            ["laneviolation", { "symbol": d3.symbolWye, "transform": "" }],
+            ["offensivefoul", { "symbol": d3.symbolWye, "transform": "" }],
+            ["personalfoul", { "symbol": d3.symbolWye, "transform": "" }],
+            ["shootingfoul", { "symbol": d3.symbolWye, "transform": "" }],
+            ["technicalfoul", { "symbol": d3.symbolWye, "transform": "" }],
+            ["assist", { "symbol": d3.symbolDiamond, "transform": "" }],
+            ["block", { "symbol": d3.symbolSquare, "transform": "" }],
+            ["rebound", { "symbol": d3.symbolTriangle, "transform": "" }],
+            ["turnover", { "symbol": d3.symbolTriangle, "transform": "" }],
+            ["lineupchange", { "symbol": d3.symbolCircle, "transform": "" }],
+            ["teamtimeout", { "symbol": d3.symbolCircle, "transform": "" }],
+            ["openinbound", { "symbol": d3.symbolCircle, "transform": "" }],
+            ["opentip", { "symbol": d3.symbolCircle, "transform": "" }],
         ])
 
         var homeTeamScore;
         var awayTeamScore;
 
         function which_event(play_data) {
-            for (var key of Object.keys(play_data)) {
-                if (key.startsWith("event_type_") && play_data[key] === "1") {
-                    return key.substring(11)
-                }
+            var eventRows = Object.entries(play_data).filter(([key, value]) => key.startsWith("event_type_"))
+            var maxEntry = eventRows.reduce((max, curr) => Number(max[1]) < Number(curr[1]) ? curr : max);
+            console.log(maxEntry)
+
+            if (maxEntry[1] > 0) {
+                return maxEntry[0].substring(11);
             }
-            return null
+            return null;
         }
 
         function which_team(play_data, home_side) {
-            if (play_data["team_basket_left"] === "1") {
+            if (play_data["team_basket_left"] > play_data["team_basket_right"]) {
                 return home_side === "left" ? "home" : "away"
-            } else if (play_data["team_basket_right"] === "1") {
+            } else {
                 return home_side === "right" ? "home" : "away"
-            } 
-            return null
+            }
         }
 
         function draw_event(play_data, period) { //, homeTeamScore, awayTeamScore) {
+            console.log(play_data)
             // Draw the current play (if we have x/y data)
             if (play_data.event_coord_x && play_data.event_coord_y) {
                 var event_type = which_event(play_data)
 
                 if (event_type) {
-                    var event_type_info = event_type_mapping.get(play_data.event_type);
+                    console.log("event: ", event_type)
+                    console.log("play_data: ", play_data)
+                    var event_type_info = event_type_mapping.get(event_type);
                     var team = which_team(play_data, period === 1 ? "left" : "right")
 
                     current_play.append("path")
@@ -223,16 +275,17 @@
                         .attr("x", play_data.event_coord_x - 10)
                         .attr("y", play_data.event_coord_y - 10);
 
-                    if (play_data.points_scored > 0) {
+                    if (event_type === "threepointmade" || event_type === "twopointmade" || event_type === "freethrowmade") {
                         console.log('shot made by team: ', team)
                         console.log('scored: ', play_data.points_scored)
                         console.log(play_data)
 
+                        points = event_type === "threepointmade" ? 3 : event_type === "twopointmade" ? 2 : 1;
                         if (team === 'home') {
-                            homeTeamScore = homeTeamScore + Number(play_data.points_scored);
+                            homeTeamScore = homeTeamScore + points;
                             home_score_display.text("Home: " + homeTeamScore);
                         } else {
-                            awayTeamScore = awayTeamScore + Number(play_data.points_scored);
+                            awayTeamScore = awayTeamScore + points;
                             away_score_display.text("Away: " + awayTeamScore);
                         }
                     }
@@ -249,15 +302,19 @@
             homeTeamScore = 0;
             awayTeamScore = 0;
 
-            var pbp_data = d3.csv("data/pbp_jay_format.csv");
+            var pbp_data = d3.csv("data/game.csv");
 
             var t = d3.interval(elapsed => {            
                 pbp_data.then(data => {
-
-                    // Loop stopping condition
-                    if (secondsElapsed > 2400) {
-                        t.stop();
-                    }
+                    // Order + clean data
+                    data.sort((a,b) => a.elapsed_time_sec - b.elapsed_time_sec)
+                    data = data.filter(a => a.elapsed_time_sec >= 0 && a.elapsed_time_sec <= 2400 &&
+                                            a.event_coord_x > 0 && a.event_coord_x < 1128 &&
+                                            a.event_coord_y > 0 && a.event_coord_y < 600)
+                    data = data.map(a => {
+                        a.elapsed_time_sec = Math.round(a.elapsed_time_sec)
+                        return a
+                    })
 
                     // Format game clock
                     var secondsLeft;
@@ -276,14 +333,14 @@
                     game_clock.text(current_time)
 
                     // Remove the last play
-                    current_play.selectAll("path").remove();
-                    current_play.selectAll("text").remove();
+                    // current_play.selectAll("path").remove();
+                    // current_play.selectAll("text").remove();
 
                     // Place all events that occur at "secondsElapsed" (can sometimes be multiple)
                     while(1) {
                         var play_data = data[place_in_data];
 
-                        if (play_data.elapsed_time_sec === secondsElapsed.toString()) {
+                        if (play_data.elapsed_time_sec === secondsElapsed) {
                             draw_event(play_data, period, homeTeamScore, awayTeamScore);
                             place_in_data++;
                         } else {
@@ -291,8 +348,13 @@
                             break;
                         }
                     }
+
+                    // Loop stopping condition
+                    if (secondsElapsed >= 2400) {
+                        t.stop();
+                    }
                 })
-            }, 250);
+            }, 300);
         })();
     </script>
 </body>
