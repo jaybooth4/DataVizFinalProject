@@ -4,7 +4,7 @@ import torch
 import pandas as pd
 
 torch.manual_seed(1)
-OUTFILE = "output/generateTest.csv"
+OUTFILE = "output/generate.csv"
 MODEL = "model/full_no_0.pt"
 
 def main():
